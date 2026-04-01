@@ -14,11 +14,14 @@ import Orders from './components/dashboard/Orders'
 import Profile from './components/dashboard/Profile'
 import Setting from './components/dashboard/Setting'
 import Checkout from './components/Checkout'
+import { UserContext } from './components/ContextUser'
+import Protectedroute from './Protectedroute'
+import Login from './components/Login'
 function App() {
   const [count, setCount] = useState(0)
-
+  const [user, setUser] = useState(false)
   return (
-    <>
+    <UserContext.Provider value={user}>
       <nav>
         <Link to='/'>Home</Link>|
         <Link to='/about'>About</Link>|
@@ -27,23 +30,25 @@ function App() {
         <Link to='/dashboard'>Dashboard</Link>
       </nav>
       <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/about' element={<About />} />
-        <Route path='/contact' element={<Contact />} />
-        <Route path='/products' element={<Products />}></Route>
-        <Route path='/products/:number' element={<Products />}></Route>
-        <Route path='dashboard' element={<Dashboard />}>
-          <Route path='orders' element={<Orders />}></Route>
-          <Route path='profile' element={<Profile />}></Route>
-          <Route path='setting' element={<Setting />}></Route>
+        <Route path='/login' element={<Login />}></Route>
+        <Route element={<Protectedroute />}>
+          <Route path='/' element={<Home />} />
+          <Route path='/about' element={<About />} />
+          <Route path='/contact' element={<Contact />} />
+          <Route path='/products' element={<Products />}></Route>
+          <Route path='/products/:number' element={<Products />}></Route>
+          <Route path='dashboard' element={<Dashboard />}>
+            <Route path='orders' element={<Orders />}></Route>
+            <Route path='profile' element={<Profile />}></Route>
+            <Route path='setting' element={<Setting />}></Route>
+          </Route>
+          <Route path='/checkout' element={<Checkout />}></Route>
+          <Route path='/checkout/:product_id' element={<Checkout />}></Route>
         </Route>
-        <Route path='/checkout' element={<Checkout />}></Route>
-        <Route path='/checkout/:product_id' element={<Checkout />}></Route>
+
         <Route path='*' element={<Notfound />} />
       </Routes>
-
-
-    </>
+    </UserContext.Provider>
   )
 }
 
